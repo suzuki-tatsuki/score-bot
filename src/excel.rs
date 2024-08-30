@@ -5,8 +5,8 @@ pub fn read_excel() {
     let mut workbook: Xlsx<_> = open_workbook(xl_book_path).expect("cannot open xl book");
 
     if let Ok(range) = workbook.worksheet_range("Sheet1") {
-        for row in 0..4 {
-            let cell_value = range.get_value((row as u32, 1));
+        for row in 1..5 {
+            let cell_value = range.get_value((row as u32, 8));
             println!("{:?}", cell_value);
         }
     } else {

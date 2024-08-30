@@ -11,7 +11,8 @@ impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
         let content: &str = &msg.content;
         match content {
-            "!score" => {
+            "score" => {
+                crate::excel::read_excel();
                 let score1 = "25000";
                 let score2 = "25000";
                 let score3 = "25000";
@@ -31,12 +32,11 @@ impl EventHandler for Handler {
                     println!("Error sending message: {:?}", why);
                 }
             }
-            "!player1" | "!p1" => {
+            "player1" | "p1" => {
                 let my_score = "25000";
                 let diff1_2 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
                 let diff1_3 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
                 let diff1_4 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
-                let rank = "1位";
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -44,7 +44,6 @@ impl EventHandler for Handler {
                                 .color(0x0000FF)
                                 .title("player1の得点")
                                 .field("得点", my_score, true)
-                                .field("順位", rank, true)
                                 .field("player2との差", diff1_2.to_string(), false)
                                 .field("player3との差", diff1_3.to_string(), false)
                                 .field("player4との差", diff1_4.to_string(), false)
