@@ -31,7 +31,7 @@ impl EventHandler for Handler {
                     println!("Error sending message: {:?}", why);
                 }
             }
-            "!player1" => {
+            "!player1" | "!p1" => {
                 let my_score = "25000";
                 let diff1_2 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
                 let diff1_3 = 25000;
