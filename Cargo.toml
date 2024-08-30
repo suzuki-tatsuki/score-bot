@@ -9,3 +9,4 @@ tokio = { version = "1.21.2", features = ["full"] }
 serde = "^1.0"
 serde_json = "^1.0"
 serenity = "0.12"
+calamine = "0.25.0"

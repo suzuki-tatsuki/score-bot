@@ -34,8 +34,8 @@ impl EventHandler for Handler {
             "!player1" | "!p1" => {
                 let my_score = "25000";
                 let diff1_2 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
-                let diff1_3 = 25000;
-                let diff1_4 = 25000;
+                let diff1_3 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
+                let diff1_4 = my_score.parse::<i32>().expect("Not a valid number") - 25000;
                 let rank = "1位";
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
