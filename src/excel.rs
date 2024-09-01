@@ -9,8 +9,8 @@ pub fn read_excel() {
             let cell_value = range.get_value((row as u32, 8));
             match cell_value {
                     Some(Data::Float(cell_value)) => {
-                        let value_string: String = cell_value.to_string();
-                        println!("{:?}", value_string);
+                        let value_float: f64 = *cell_value;
+                        println!("{:?}", value_float);
                     },
                     _ => println!("Not a float value or empty"),
                 }
