@@ -1,3 +1,5 @@
+use crate::excel;
+
 use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::all::{CreateMessage, CreateEmbed};
@@ -10,13 +12,13 @@ struct Handler;
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
         let content: &str = &msg.content;
+        let excel_data = excel::read_excel();
         match content {
             "score" => {
-                crate::excel::read_excel();
-                let score1 = "25000";
-                let score2 = "25000";
-                let score3 = "25000";
-                let score4 = "25000";
+                let score1 = excel_data.score[0].to_string();
+                let score2 = excel_data.score[1].to_string();
+                let score3 = excel_data.score[2].to_string();
+                let score4 = excel_data.score[3].to_string();
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
