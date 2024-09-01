@@ -21,6 +21,7 @@ impl EventHandler for Handler {
                 let score4 = excel_data.score[3].to_string();
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
+                        .content(excel_data.kyoku_num)
                         .embed(
                             CreateEmbed::new()
                                 .color(0x00FF00)
