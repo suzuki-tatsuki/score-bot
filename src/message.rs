@@ -14,7 +14,7 @@ impl EventHandler for Handler {
         let content: &str = &msg.content;
         let excel_data = excel::read_excel();
         match content {
-            "score" => {
+            "score" | "得点" | "てん" | "点" | "0" => {
                 let score1 = excel_data.score[0].to_string();
                 let score2 = excel_data.score[1].to_string();
                 let score3 = excel_data.score[2].to_string();
