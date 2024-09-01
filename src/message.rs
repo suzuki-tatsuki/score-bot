@@ -24,7 +24,7 @@ impl EventHandler for Handler {
                         .content(excel_data.kyoku_num)
                         .embed(
                             CreateEmbed::new()
-                                .color(0x000000)
+                                .color(0xFFFFFF)
                                 .title("得点一覧")
                                 .field("player1", score1, false)
                                 .field("player2", score2, false)
@@ -56,60 +56,60 @@ impl EventHandler for Handler {
                 }
             }
             "player2" | "p2" | "2" | "２" => {
-                let my_score = excel_data.score[0];
-                let diff1_2 = my_score - excel_data.score[1];
-                let diff1_3 = my_score - excel_data.score[2];
-                let diff1_4 = my_score - excel_data.score[3];
+                let my_score = excel_data.score[1];
+                let diff2_1 = my_score - excel_data.score[0];
+                let diff2_3 = my_score - excel_data.score[2];
+                let diff2_4 = my_score - excel_data.score[3];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
                             CreateEmbed::new()
-                                .color(0x0000FF)
-                                .title("player1の得点")
+                                .color(0xDC143C)
+                                .title("player2の得点")
                                 .field("得点", my_score.to_string(), true)
-                                .field("player2との差", diff1_2.to_string(), false)
-                                .field("player3との差", diff1_3.to_string(), false)
-                                .field("player4との差", diff1_4.to_string(), false)
+                                .field("player2との差", diff2_1.to_string(), false)
+                                .field("player3との差", diff2_3.to_string(), false)
+                                .field("player4との差", diff2_4.to_string(), false)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
                 }
             }
             "player3" | "p3" | "3" | "３" => {
-                let my_score = excel_data.score[0];
-                let diff1_2 = my_score - excel_data.score[1];
-                let diff1_3 = my_score - excel_data.score[2];
-                let diff1_4 = my_score - excel_data.score[3];
+                let my_score = excel_data.score[2];
+                let diff3_1 = my_score - excel_data.score[0];
+                let diff3_2 = my_score - excel_data.score[1];
+                let diff3_4 = my_score - excel_data.score[3];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
                             CreateEmbed::new()
-                                .color(0x0000FF)
+                                .color(0x008000)
                                 .title("player1の得点")
                                 .field("得点", my_score.to_string(), true)
-                                .field("player2との差", diff1_2.to_string(), false)
-                                .field("player3との差", diff1_3.to_string(), false)
-                                .field("player4との差", diff1_4.to_string(), false)
+                                .field("player2との差", diff3_1.to_string(), false)
+                                .field("player3との差", diff3_2.to_string(), false)
+                                .field("player4との差", diff3_4.to_string(), false)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
                 }
             }
             "player4" | "p4" | "4" | "４" => {
-                let my_score = excel_data.score[0];
-                let diff1_2 = my_score - excel_data.score[1];
-                let diff1_3 = my_score - excel_data.score[2];
-                let diff1_4 = my_score - excel_data.score[3];
+                let my_score = excel_data.score[3];
+                let diff4_1 = my_score - excel_data.score[0];
+                let diff4_2 = my_score - excel_data.score[1];
+                let diff4_3 = my_score - excel_data.score[2];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
                             CreateEmbed::new()
-                                .color(0x0000FF)
-                                .title("player1の得点")
+                                .color(0xFFFF00)
+                                .title("player4の得点")
                                 .field("得点", my_score.to_string(), true)
-                                .field("player2との差", diff1_2.to_string(), false)
-                                .field("player3との差", diff1_3.to_string(), false)
-                                .field("player4との差", diff1_4.to_string(), false)
+                                .field("player2との差", diff4_1.to_string(), false)
+                                .field("player3との差", diff4_2.to_string(), false)
+                                .field("player4との差", diff4_3.to_string(), false)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
