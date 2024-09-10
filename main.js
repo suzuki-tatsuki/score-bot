@@ -1,59 +1,60 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const xlsx = require('xlsx');
+const XLSX = require('xlsx');
+
+let mainWindow;
 
 function createWindow() {
-	const win = new BrowserWindow({
-		width: 1200,
-		height: 1000,
-		webPreferences: {
-			preload: path.join(__dirname, 'renderer.js'),
-			nodeIntegration: false,
-			contextIsolation: true,
-		}
-	});
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'), // ipcRendererを使うための設定
+            nodeIntegration: true, // これを有効にしないと、requireが使えない
+            contextIsolation: false,
+        }
+    });
 
-	win.loadFile('index.html');
-
-	// ウィンドウが閉じられたときにアプリケーションを終了する
-	win.on('closed', () => {
-		console.log("メインウィンドウが閉じられたのでアプリを終了します");
-		app.quit();
-	});
+    mainWindow.loadFile('index.html');
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    createWindow();
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
+});
+
 app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		console.log("全てのウィンドウが閉じられたのでアプリを終了します");
-		app.quit();
-	}
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
 });
 
-app.on('activate', () => {
-	if (BrowserWindow.getAllWindows().length === 0) {
-		createWindow();
-		console.log("アプリ用ウィンドウが作られました");
-	}
-});
+// IPC通信でボタンのクリックイベントを受け取り、Excelファイルを書き換える
+ipcMain.on('edit-excel', (event, arg) => {
+    // 新しいExcelファイルの作成
+    let workbook = XLSX.utils.book_new();
+    
+    // シートデータを作成
+    let data = [
+        ['ID', 'Name', 'Score'],
+        [1, 'Alice', 90],
+        [2, 'Bob', 85],
+        [3, 'Charlie', 78]
+    ];
 
-// IPC通信でExcelファイルの読み込みと保存を実行
-ipcMain.handle('read-and-update-xlsx', (event, args) => {
-	console.log("ipcMainが実行されました");
-	const workbook = xlsx.readFile('data.xlsx');
-	const sheetName = workbook.SheetNames[0];
-	const worksheet = workbook.Sheets[sheetName];
-	const data = xlsx.utils.sheet_to_json(worksheet);
+    let worksheet = XLSX.utils.aoa_to_sheet(data);
 
-	// データを編集
-	data.push({ Name: 'New Name', Age: 30, City: 'New City' });
-	console.debug("データがpushされました");
+    // ワークブックにシートを追加
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-	const newWorksheet = xlsx.utils.json_to_sheet(data);
-	workbook.Sheets[sheetName] = newWorksheet;
+    // Excelファイルとして保存
+    XLSX.writeFile(workbook, path.join(__dirname, 'output.xlsx'));
 
-	// ファイルの保存
-	xlsx.writeFile(workbook, 'data_update.xlsx');
-
-	return 'ファイルが更新され、保存されました。';
+    // 処理が完了したことをレンダラープロセスに通知
+    event.reply('excel-done', 'Excelファイルに書き込みました');
 });

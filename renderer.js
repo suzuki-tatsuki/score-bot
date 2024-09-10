@@ -1,9 +1,11 @@
-console.debug('Renderer script loaded');
-
 const { ipcRenderer } = require('electron');
 
-document.getElementById('edit-excel').addEventListener('click', async () => {
-	console.log("エクセル編集のイベント発生");
-	const result = await ipcRenderer.invoke('read-and-update-xlsx');
-	document.getElementById('status').innerText = result;
+// ボタンのクリックイベント
+document.getElementById('edit-excel').addEventListener('click', () => {
+    ipcRenderer.send('edit-excel');
+});
+
+// 処理完了の通知を受け取る
+ipcRenderer.on('excel-done', (event, message) => {
+    document.getElementById('status').textContent = message;
 });
