@@ -4,6 +4,9 @@ const XLSX = require('xlsx');
 
 let mainWindow;
 
+// エクセルに挿入する行を管理するための変数
+let row = 1;
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -26,6 +29,7 @@ function createWindow() {
     });
 }
 
+// 初期起動処理
 app.whenReady().then(() => {
     createWindow();
 
@@ -36,31 +40,32 @@ app.whenReady().then(() => {
     });
 });
 
+// 全てのウィンドウが閉じられたらアプリを終了する
 app.on('window-all-closed', () => {
 	app.quit();
 });
 
 // IPC通信でボタンのクリックイベントを受け取り、Excelファイルを書き換える
 ipcMain.on('edit-excel', (event, arg) => {
-    // 新しいExcelファイルの作成
-    let workbook = XLSX.utils.book_new();
-    
-    // シートデータを作成
-    let data = [
-        ['ID', 'Name', 'Score'],
-        [1, 'Alice', 90],
-        [2, 'Bob', 85],
-        [3, 'Charlie', 78]
-    ];
+	console.log("start ipcMain");
+    const filePath = 'data.xlsx'; // 読み込みたいExcelファイルのパス
 
-    let worksheet = XLSX.utils.aoa_to_sheet(data);
+    // 既存のExcelファイルを読み込み
+    let workbook = XLSX.readFile(filePath);
 
-    // ワークブックにシートを追加
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    // シートを取得
+    let worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-    // Excelファイルとして保存
-    XLSX.writeFile(workbook, path.join(__dirname, 'output.xlsx'));
+    // 追加データを作成
+    let newData = [["0本場", 8000, -2000, -2000, -4000]];
 
-    // 処理が完了したことをレンダラープロセスに通知
-    event.reply('excel-done', 'Excelファイルに書き込みました');
+    // 既存シートに新しいデータを追加
+    XLSX.utils.sheet_add_aoa(worksheet, newData, { origin: { r: row, c: 0 }});
+	row++;	// 次に書き換える行を更新する
+
+    // ファイルに上書き保存
+    XLSX.writeFile(workbook, filePath);
+
+    // 処理が完了したことを通知
+    event.reply('excel-updated', 'Excelファイルが更新されました');
 });
