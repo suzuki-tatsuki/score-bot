@@ -6,8 +6,8 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 1200,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'), // ipcRendererを使うための設定
             nodeIntegration: true, // これを有効にしないと、requireが使えない
@@ -16,6 +16,14 @@ function createWindow() {
     });
 
     mainWindow.loadFile('index.html');
+
+	// ウィンドウを閉じたらアプリを終了
+    mainWindow.on('closed', function () {
+        mainWindow = null; // メモリリーク防止のため、ウィンドウオブジェクトを破棄
+        if (process.platform !== 'darwin') {
+            app.quit(); // WindowsやLinuxの場合にアプリ全体を終了
+        }
+    });
 }
 
 app.whenReady().then(() => {
@@ -29,9 +37,7 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+	app.quit();
 });
 
 // IPC通信でボタンのクリックイベントを受け取り、Excelファイルを書き換える
