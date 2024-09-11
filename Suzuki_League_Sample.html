@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+  <html lang=ja>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>点数計算</title>
+  </head>
+
+  <script>
+    function cul_keiten(){
+      let winner1 = document.getElementById("keiten1").checked;
+      let winner2 = document.getElementById("keiten2").checked;
+      let winner3 = document.getElementById("keiten3").checked;
+      let winner4 = document.getElementById("keiten4").checked;
+
+      let reach1 = document.getElementById("reach1").checked;
+      let reach2 = document.getElementById("reach2").checked;
+      let reach3 = document.getElementById("reach3").checked;
+      let reach4 = document.getElementById("reach4").checked;
+
+      let kyotaku = parseInt(document.getElementById("kyotaku").value);
+      let honba = parseInt(document.getElementById("honba").value);
+
+      let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
+      if(n != 0){
+        let tensu = 3000 / n;
+        alert(n+" "+tensu);
+      }else{
+        alert("ノーテン");
+      }
+    }
+
+    function cul_tumo(){
+      let winner1 = document.getElementById("tumo1").checked;
+      let winner2 = document.getElementById("tumo2").checked;
+      let winner3 = document.getElementById("tumo3").checked;
+      let winner4 = document.getElementById("tumo4").checked;
+
+      let reach1 = document.getElementById("reach1").checked;
+      let reach2 = document.getElementById("reach2").checked;
+      let reach3 = document.getElementById("reach3").checked;
+      let reach4 = document.getElementById("reach4").checked;
+
+      let kyotaku = parseInt(document.getElementById("kyotaku").value);
+      let honba = parseInt(document.getElementById("honba").value);
+
+      let kyoku = parseInt(document.getElementById("kyoku").value);
+      let han = parseInt(document.getElementById("han").value);
+      let hu = parseInt(document.getElementById("hu").value);
+
+      let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
+      let m = (winner1 ? 1 : 0) + (winner2 ? 2 : 0) + (winner3 ? 3 : 0) + (winner4 ? 4 : 0);
+      let tensu;
+      let kachiten;
+      let maketen;
+      let tensu_oya;
+      let tensu_ko;
+
+      if( n != 1 ){
+        alert("正しく選択されていません")
+      }else if( m == kyoku ){
+        //親の場合
+        if(han >= 13){
+          tensu = 48000 ;
+        }else if(han >= 11){
+          tensu = 36000 ;
+        }else if(han >= 8){
+          tensu = 24000 ;
+        }else if(han >= 6){
+          tensu = 18000 ;
+        }else if(han == 5||(han == 4 && hu >= 30)||(han == 3 && hu >= 70)){
+          tensu = 12000 ;
+        }else if(han == 4){
+          switch(hu){
+            case 20 :
+            tensu = 7800 ;
+            break;
+            case 25 :
+            tensu = 9600 ;
+            break;
+          }
+        }else if(han == 3){
+          switch(hu){
+            case 20 :
+            tensu = 3900 ;
+            break;
+            case 25 :
+            tensu = 4800 ;
+            break;
+            case 30 :
+            tensu = 6000 ;
+            break;
+            case 40 :
+            tensu = 7800 ;
+            break;
+            case 50 :
+            tensu = 9600 ;
+            break;
+          }
+        }else if(han == 2){
+          switch(hu){
+            case 20 :
+            tensu = 2100 ;
+            break;
+            case 25 :
+            tensu = 2100 ;
+            break;
+            case 30 :
+            tensu = 3000 ;
+            break;
+            case 40 :
+            tensu = 3900 ;
+            break;
+            case 50 :
+            tensu = 4800 ;
+            break;
+            case 60 :
+            tensu = 6000 ;
+            break;
+            case 70 :
+            tensu = 6900 ;
+            break;
+            case 80 :
+            tensu = 7800 ;
+            break;
+            case 90 :
+            tensu = 8700 ;
+            break;
+            case 100 :
+            tensu = 9600 ;
+            break;
+            case 110 :
+            tensu = 10800 ;
+            break;
+          }
+        }else{
+          switch(hu){
+            case 30 :
+            tensu = 1500 ;
+            break;
+            case 40 :
+            tensu = 2100 ;
+            break;
+            case 50 :
+            tensu = 2400 ;
+            break;
+            case 60 :
+            tensu = 3000 ;
+            break;
+            case 70 :
+            tensu = 3600 ;
+            break;
+            case 80 :
+            tensu = 3900 ;
+            break;
+            case 90 :
+            tensu = 4500 ;
+            break;
+            case 100 :
+            tensu = 4800 ;
+            break;
+          }
+        }
+
+        kachiten = tensu + kyotaku * 1000 + honba * 300 ;
+        maketen = -((tensu / 3) + honba * 100) ;
+        alert("勝ち："+ kachiten +" 払い："+ maketen);
+
+      }else{
+        //子の場合
+        if(han >= 13){
+          tensu_ko = 8000 ;
+          tensu_oya = 16000 ;
+        }else if(han >= 11){
+          tensu_ko = 6000 ;
+          tensu_oya = 12000 ;
+        }else if(han >= 8){
+          tensu_ko = 4000 ;
+          tensu_oya = 8000 ;
+        }else if(han >= 6){
+          tensu_ko = 3000 ;
+          tensu_oya = 6000 ;
+        }else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 70)){
+          tensu_ko = 2000 ;
+          tensu_oya = 4000 ;
+        }else if(han == 4){
+          switch(hu){
+            case 20 :
+            tensu_ko = 1300 ;
+            tensu_oya = 2600 ;
+            break;
+            case 25 :
+            tensu_ko = 1600 ;
+            tensu_oya = 3200 ;
+            break;
+          }
+        }else if(han == 3){
+          switch(hu){
+            case 20 :
+            tensu_ko = 700 ;
+            tensu_oya = 1300 ;
+            break;
+            case 25 :
+            tensu_ko = 800 ;
+            tensu_oya = 1600 ;
+            break;
+            case 30 :
+            tensu_ko = 1000 ;
+            tensu_oya = 2000 ;
+            break;
+            case 40 :
+            tensu_ko = 1300 ;
+            tensu_oya = 2600 ;
+            break;
+            case 50 :
+            tensu_ko = 1600 ;
+            tensu_oya = 3200 ;
+            break;
+          }
+        }else if(han == 2){
+          switch(hu){
+            case 20 :
+            tensu_ko = 400 ;
+            tensu_oya = 700 ;
+            break;
+            case 25 :
+            tensu_ko = 400 ;
+            tensu_oya = 700 ;
+            break;
+            case 30 :
+            tensu_ko = 500 ;
+            tensu_oya = 1000 ;
+            break;
+            case 40 :
+            tensu_ko = 700 ;
+            tensu_oya = 1300 ;
+            break;
+            case 50 :
+            tensu_ko = 800 ;
+            tensu_oya = 1600 ;
+            break;
+            case 60 :
+            tensu_ko = 1000 ;
+            tensu_oya = 2000 ;
+            break;
+            case 70 :
+            tensu_ko = 1200 ;
+            tensu_oya = 2300 ;
+            break;
+            case 80 :
+            tensu_ko = 1300 ;
+            tensu_oya = 2600 ;
+            break;
+            case 90 :
+            tensu_ko = 1500 ;
+            tensu_oya = 2900 ;
+            break;
+            case 100 :
+            tensu_ko = 1600 ;
+            tensu_oya = 3200 ;
+            break;
+            case 110 :
+            tensu_ko = 1800 ;
+            tensu_oya = 3600 ;
+            break;
+          }
+        }else{
+          switch(hu){
+            case 30 :
+            tensu_ko = 300 ;
+            tensu_oya = 500 ;
+            break;
+            case 40 :
+            tensu_ko = 400 ;
+            tensu_oya = 700 ;
+            break;
+            case 50 :
+            tensu_ko = 400 ;
+            tensu_oya = 800 ;
+            break;
+            case 60 :
+            tensu_ko = 500 ;
+            tensu_oya = 1000 ;
+            break;
+            case 70 :
+            tensu_ko = 600 ;
+            tensu_oya = 1200 ;
+            break;
+            case 80 :
+            tensu_ko = 700 ;
+            tensu_oya = 1300 ;
+            break;
+            case 90 :
+            tensu_ko = 800 ;
+            tensu_oya = 1500 ;
+            break;
+            case 100 :
+            tensu_ko = 800 ;
+            tensu_oya = 1600 ;
+            break;
+          }
+        }
+        alert("勝ち："+((tensu_oya + 2 * tensu_ko) + kyotaku * 1000 + kyoku * 300)
+        +"　親払い："+(tensu_oya + kyoku * 100)+
+        "　子払い："+(tensu_ko + kyoku * 100));
+      }
+    }
+
+    function cul_ron(){
+      let winner1 = document.getElementById("tumo1").checked;
+      let winner2 = document.getElementById("tumo2").checked;
+      let winner3 = document.getElementById("tumo3").checked;
+      let winner4 = document.getElementById("tumo4").checked;
+
+      let winner1 = document.getElementById("reach1").checked;
+      let winner2 = document.getElementById("reach2").checked;
+      let winner3 = document.getElementById("reach3").checked;
+      let winner4 = document.getElementById("reach4").checked;
+
+      let kyoku = parseInt(document.getElementById("kyoku").value);
+      let han = parseInt(document.getElementById("han_ron").value);
+      let hu = parseInt(document.getElementById("hu_ron").value);
+
+      let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
+      let m = (winner1 ? 1 : 0) + (winner2 ? 2 : 0) + (winner3 ? 3 : 0) + (winner4 ? 4 : 0);
+      let l = (loser1 ? 1 : 0) + (loser2 ? 2 : 0) + (loser3 ? 3 : 0) + (loser4 ? 4 : 0);
+      let tensu;
+
+      if( n != 1 ){
+        alert("正しく選択されていません")
+      }else if( m == kyoku ){
+        //親の場合
+        if(han_ron >= 13){
+          tensu = 48000 ;
+        }else if(han_ron >= 11){
+          tensu = 36000 ;
+        }else if(han_ron >= 8){
+          tensu = 24000 ;
+        }else if(han_ron >= 6){
+          tensu = 18000 ;
+        }else if(han == 5||(han_ron >= 4 && hu_ron >= 30)||(han_ron >= 3 && hu_ron >= 70)){
+          tensu = 12000 ;
+        }else if(han_ron == 4){
+          switch(hu_ron){
+            case 20 :
+            tensu = 7700 ;
+            break;
+            case 25 :
+            tensu = 9600 ;
+            break;
+          }
+        }else if(han_ron == 3){
+          switch(hu_ron){
+            case 20 :
+            tensu = 3900 ;
+            break;
+            case 25 :
+            tensu = 4800 ;
+            break;
+            case 30 :
+            tensu = 5800 ;
+            break;
+            case 40 :
+            tensu = 7700 ;
+            break;
+            case 50 :
+            tensu = 9600 ;
+            break;
+          }
+        }else if(han_ron == 2){
+          switch(hu_ron){
+            case 20 :
+            tensu = 2100 ;
+            break;
+            case 25 :
+            tensu = 2400 ;
+            break;
+            case 30 :
+            tensu = 2900 ;
+            break;
+            case 40 :
+            tensu = 3900 ;
+            break;
+            case 50 :
+            tensu = 4800 ;
+            break;
+            case 60 :
+            tensu = 5800 ;
+            break;
+            case 70 :
+            tensu = 6800 ;
+            break;
+            case 80 :
+            tensu = 7700 ;
+            break;
+            case 90 :
+            tensu = 8700 ;
+            break;
+            case 100 :
+            tensu = 9600 ;
+            break;
+            case 110 :
+            tensu = 10600 ;
+            break;
+          }
+        }else{
+          switch(hu_ron){
+            case 30 :
+            tensu = 1500 ;
+            break;
+            case 40 :
+            tensu = 2000 ;
+            break;
+            case 50 :
+            tensu = 2400 ;
+            break;
+            case 60 :
+            tensu = 2900 ;
+            break;
+            case 70 :
+            tensu = 3400 ;
+            break;
+            case 80 :
+            tensu = 3900 ;
+            break;
+            case 90 :
+            tensu = 4400 ;
+            break;
+            case 100 :
+            tensu = 4800 ;
+            break;
+          }
+        }
+        alert("点数："+ tensu + kyoku * 100);
+      }else{
+        //子の場合
+        if(han_ron >= 13){
+          tensu = 32000 ;
+        }else if(han_ron >= 11){
+          tensu = 24000 ;
+        }else if(han_ron >= 8){
+          tensu = 18000 ;
+        }else if(han_ron >= 6){
+          tensu = 12000 ;
+        }else if(han == 5||(han_ron >= 4 && hu_ron >= 30)||(han_ron >= 3 && hu_ron >= 70)){
+          tensu = 8000 ;
+        }else if(han_ron == 4){
+          switch(hu_ron){
+            case 20 :
+            tensu = 5200 ;
+            break;
+            case 25 :
+            tensu = 6400 ;
+            break;
+          }
+        }else if(han_ron == 3){
+          switch(hu_ron){
+            case 20 :
+            tensu = 2600 ;
+            break;
+            case 25 :
+            tensu = 3200 ;
+            break;
+            case 30 :
+            tensu = 3900 ;
+            break;
+            case 40 :
+            tensu = 5200 ;
+            break;
+            case 50 :
+            tensu = 6400 ;
+            break;
+          }
+        }else if(han_ron == 2){
+          switch(hu_ron){
+            case 20 :
+            tensu = 1000 ;
+            break;
+            case 25 :
+            tensu = 1600 ;
+            break;
+            case 30 :
+            tensu = 2000 ;
+            break;
+            case 40 :
+            tensu = 2600 ;
+            break;
+            case 50 :
+            tensu = 3200 ;
+            break;
+            case 60 :
+            tensu = 3900 ;
+            break;
+            case 70 :
+            tensu = 4500 ;
+            break;
+            case 80 :
+            tensu = 5200 ;
+            break;
+            case 90 :
+            tensu = 5800 ;
+            break;
+            case 100 :
+            tensu = 6400 ;
+            break;
+            case 110 :
+            tensu = 7100 ;
+            break;
+          }
+        }else{
+          switch(hu_ron){
+            case 30 :
+            tensu = 1000 ;
+            break;
+            case 40 :
+            tensu = 1300 ;
+            break;
+            case 50 :
+            tensu = 1600 ;
+            break;
+            case 60 :
+            tensu = 2000 ;
+            break;
+            case 70 :
+            tensu = 2300 ;
+            break;
+            case 80 :
+            tensu = 2600 ;
+            break;
+            case 90 :
+            tensu = 2900 ;
+            break;
+            case 100 :
+            tensu = 3200 ;
+            break;
+          }
+
+        }
+        alert("点数："+ tensu + kyoku * 100);
+      }
+
+
+    }
+
+  </script>
+
+  <body>
+    <br>
+    <!--場の情報-->
+    <select name="kaze" id="kaze" size=1>
+      <option value="ton">東
+      <option value="nan">南</select>
+    <select name="kyoku" id="kyoku" size=1>
+      <option value="1">1
+      <option value="2">2
+      <option value="3">3
+      <option value="4">4</select>局
+    <input type="text" id="honba" size=1>本場 &emsp;
+    供託<input type="text" id="kyotaku" size=1>本
+    <br><br>
+
+    <!--立直者の情報-->
+    <fieldset>
+      <legend>立直</legend>
+      <input type="checkbox" id="reach1" value="B">player1 &emsp;
+      <input type="checkbox" id="reach2" value="D">player2 &emsp;
+      <input type="checkbox" id="reach3" value="F">player3 &emsp;
+      <input type="checkbox" id="reach4" value="G">player4 &emsp;<br>
+    </fieldset><br>
+
+    <!--流局した場合の処理-->
+    <fieldset>
+      <legend>形テン</legend>
+      上がった人<br> &emsp;
+      <input type="checkbox" id="keiten1" value="1">player1 &emsp;
+      <input type="checkbox" id="keiten2" value="1">player2 &emsp;
+      <input type="checkbox" id="keiten3" value="1">player3 &emsp;
+      <input type="checkbox" id="keiten4" value="1">player4 &emsp;<br><br>
+      <button type="button" onclick="cul_keiten()">出力</button> &emsp;<br>
+    </fieldset><br>
+
+    <!--ツモ上がりの場合-->
+    <fieldset>
+      <legend>ツモ</legend>
+      <select name="hu" id="hu" size=1>
+        <option value="20">20
+        <option value="25">25
+        <option value="30">30
+        <option value="40">40
+        <option value="50">50
+        <option value="60">60
+        <option value="70">70
+        <option value="80">80
+        <option value="90">90
+        <option value="100">100
+        <option value="110">110</select>符
+      <input type="text" id="han" size=1>飜<br><br>
+      上がった人<br> &emsp;
+      <input type="checkbox" id="tumo1" value="1">player1 &emsp;
+      <input type="checkbox" id="tumo2" value="1">player2 &emsp;
+      <input type="checkbox" id="tumo3" value="1">player3 &emsp;
+      <input type="checkbox" id="tumo4" value="1">player4 &emsp;<br><br>
+      <button type="button" onclick="cul_tumo()">出力</button> &emsp;<br>
+    </fieldset><br>
+
+    <!--ロン上がりの場合-->
+    <fieldset>
+      <legend>ロン</legend>
+      <select name="hu" id="hu_ron" size=1>
+        <option value="20">20
+        <option value="25">25
+        <option value="30">30
+        <option value="40">40
+        <option value="50">50
+        <option value="60">60
+        <option value="70">70
+        <option value="80">80
+        <option value="90">90
+        <option value="100">100
+        <option value="110">110</select>符
+      <input type="text" id="han" size=1>飜<br><br>
+      上がった人<br> &emsp;
+      <input type="checkbox" id="winner1" value="1">player1 &emsp;
+      <input type="checkbox" id="winner2" value="1">player2 &emsp;
+      <input type="checkbox" id="winner3" value="1">player3 &emsp;
+      <input type="checkbox" id="winner4" value="1">player4 &emsp;<br><br>
+      振り込んだ人<br> &emsp;
+      <input type="checkbox" id="loser1" value="1">player1 &emsp;
+      <input type="checkbox" id="loser2" value="1">player2 &emsp;
+      <input type="checkbox" id="loser3" value="1">player3 &emsp;
+      <input type="checkbox" id="loser4" value="1">player4 &emsp;<br><br>
+      <button type="button" onclick="cul_ron()">出力</button> &emsp;<br>
+    </fieldset><br>
+
+    </body>
+    </html>
