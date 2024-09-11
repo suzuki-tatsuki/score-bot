@@ -6,9 +6,92 @@
     <title>Excel Edit App</title>
 </head>
 <body>
-    <h1>Excelファイルを編集</h1>
-    <button id="edit-excel">Excelファイルを編集</button>
-    <p id="status"></p>
+    <br>
+    <!--場の情報-->
+    <select name="kaze" id="kaze" size=1>
+      <option value="ton">東
+      <option value="nan">南</select>
+    <select name="kyoku" id="kyoku" size=1>
+      <option value="1">1
+      <option value="2">2
+      <option value="3">3
+      <option value="4">4</select>局
+    <input type="text" id="honba" size=1>本場 &emsp;
+    供託<input type="text" id="kyotaku" size=1>本
+    <br><br>
+
+    <!--立直者の情報-->
+    <fieldset>
+      <legend>立直</legend>
+      <input type="checkbox" id="reach1" value="B">player1 &emsp;
+      <input type="checkbox" id="reach2" value="D">player2 &emsp;
+      <input type="checkbox" id="reach3" value="F">player3 &emsp;
+      <input type="checkbox" id="reach4" value="G">player4 &emsp;<br>
+    </fieldset><br>
+
+    <!--流局した場合の処理-->
+    <fieldset>
+      <legend>形テン</legend>
+      上がった人<br> &emsp;
+      <input type="checkbox" id="keiten1" value="1">player1 &emsp;
+      <input type="checkbox" id="keiten2" value="1">player2 &emsp;
+      <input type="checkbox" id="keiten3" value="1">player3 &emsp;
+      <input type="checkbox" id="keiten4" value="1">player4 &emsp;<br><br>
+      <button id="keiten" type="button">出力</button> &emsp;<br>
+    </fieldset><br>
+
+    <!--ツモ上がりの場合-->
+    <fieldset>
+      <legend>ツモ</legend>
+      <select name="hu" id="hu" size=1>
+        <option value="20">20
+        <option value="25">25
+        <option value="30">30
+        <option value="40">40
+        <option value="50">50
+        <option value="60">60
+        <option value="70">70
+        <option value="80">80
+        <option value="90">90
+        <option value="100">100
+        <option value="110">110</select>符
+      <input type="text" id="han" size=1>飜<br><br>
+      上がった人<br> &emsp;
+      <input type="checkbox" id="tumo1" value="1">player1 &emsp;
+      <input type="checkbox" id="tumo2" value="1">player2 &emsp;
+      <input type="checkbox" id="tumo3" value="1">player3 &emsp;
+      <input type="checkbox" id="tumo4" value="1">player4 &emsp;<br><br>
+      <button id="tumo" type="button">出力</button> &emsp;<br>
+    </fieldset><br>
+
+    <!--ロン上がりの場合-->
+    <fieldset>
+      <legend>ロン</legend>
+      <select name="hu" id="hu_ron" size=1>
+        <option value="20">20
+        <option value="25">25
+        <option value="30">30
+        <option value="40">40
+        <option value="50">50
+        <option value="60">60
+        <option value="70">70
+        <option value="80">80
+        <option value="90">90
+        <option value="100">100
+        <option value="110">110</select>符
+      <input type="text" id="han_ron" size=1>飜<br><br>
+      上がった人<br> &emsp;
+      <input type="checkbox" id="winner1" value="1">player1 &emsp;
+      <input type="checkbox" id="winner2" value="1">player2 &emsp;
+      <input type="checkbox" id="winner3" value="1">player3 &emsp;
+      <input type="checkbox" id="winner4" value="1">player4 &emsp;<br><br>
+      振り込んだ人<br> &emsp;
+      <input type="checkbox" id="loser1" value="1">player1 &emsp;
+      <input type="checkbox" id="loser2" value="1">player2 &emsp;
+      <input type="checkbox" id="loser3" value="1">player3 &emsp;
+      <input type="checkbox" id="loser4" value="1">player4 &emsp;<br><br>
+      <button id="ron" type="button">出力</button> &emsp;<br>
+    </fieldset><br>
 
     <script src="renderer.js"></script>
 </body>
