@@ -12,8 +12,9 @@ struct Handler;
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
         let content: &str = &msg.content;
-        let excel_data = excel::read_excel();
         match content {
+            let excel_data = excel::read_excel();
+            print!("reload data!");
             "score" | "得点" | "てん" | "点" | "0" | "０" => {
                 let score1 = excel_data.score[0].to_string();
                 let score2 = excel_data.score[1].to_string();
