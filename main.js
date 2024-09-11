@@ -47,7 +47,8 @@ app.on('window-all-closed', () => {
 
 function cul_keiten(winner1, winner2, winner3, winner4){
   let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
-	// DEBUG: 複数人上がっている時の処理を見直すべき
+	// DEBUG: 複数人テンパイがいる時の処理を見直すべき
+	// 誰と誰がテンパイだったのか
   if(n != 0){
 	let tensu = 3000 / n;
 	console.log("player" + n + ", " + tensu + "点");
@@ -171,6 +172,7 @@ function cul_tumo(winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han
 	  }
 	}
 
+	// DEBUG: 点数表示を親子で分ける理由がなければ共通化できるはず
 	kachiten = tensu + kyotaku * 1000 + honba * 300 ;
 	maketen = -((tensu / 3) + honba * 100) ;
 	console.log("勝ち："+ kachiten +" 払い："+ maketen);
@@ -321,6 +323,8 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
   let l = (loser1 ? 1 : 0) + (loser2 ? 2 : 0) + (loser3 ? 3 : 0) + (loser4 ? 4 : 0);
   let tensu;
 
+	// DEBUG:同じ人を選択した場合も弾くべき
+	// もしくはチェックボックスじゃなくてプルタブを使う
   if( n != 1 ){
 	console.log("正しく選択されていません")
   }else if( m == kyoku ){
@@ -426,7 +430,6 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 		break;
 	  }
 	}
-	console.log("点数："+ tensu + "+" + kyoku * 100);
   }else{
 	//子の場合
 	if(han >= 13){
@@ -529,12 +532,11 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 		tensu = 3200 ;
 		break;
 	  }
-
 	}
-	console.log("点数："+ tensu + "+" +kyoku * 100);
   }
 
-
+	console.log("player" + l + " -> player" + n);
+	console.log("点数："+ tensu + "+" + kyoku * 100);
 }
 
 /*
