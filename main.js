@@ -10,7 +10,7 @@ let row = 1;
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
-        height: 1200,
+        height: 1000,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'), // ipcRendererを使うための設定
             nodeIntegration: true, // これを有効にしないと、requireが使えない
