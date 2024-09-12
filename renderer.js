@@ -6,7 +6,14 @@ document.getElementById('keiten').addEventListener('click', () => {
 	let winner3 = document.getElementById("keiten3").checked;
 	let winner4 = document.getElementById("keiten4").checked;
 
-    ipcRenderer.send('keiten', winner1, winner2, winner3, winner4);
+	let reach1 = document.getElementById("reach1").checked;
+	let reach2 = document.getElementById("reach2").checked;
+	let reach3 = document.getElementById("reach3").checked;
+	let reach4 = document.getElementById("reach4").checked;
+
+	let kyoku = parseInt(document.getElementById("kyoku").value);
+
+    ipcRenderer.send('keiten', winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku);
 });
 
 document.getElementById('tumo').addEventListener('click', () => {
@@ -17,7 +24,6 @@ document.getElementById('tumo').addEventListener('click', () => {
 
 	let kyotaku = parseInt(document.getElementById("kyotaku").value);
 	let honba = parseInt(document.getElementById("honba").value);
-
 	let kyoku = parseInt(document.getElementById("kyoku").value);
 	let han = parseInt(document.getElementById("han").value);
 	let hu = parseInt(document.getElementById("hu").value);

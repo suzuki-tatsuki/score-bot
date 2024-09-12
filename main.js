@@ -4,6 +4,8 @@ const XLSX = require('xlsx');
 
 let mainWindow;
 
+const filePath = 'Suzuki_League_Score.xlsx'; // 読み込みたいExcelファイルのパス
+
 // エクセルに挿入する行を管理するための変数
 let row = 1;
 
@@ -45,16 +47,55 @@ app.on('window-all-closed', () => {
 	app.quit();
 });
 
-function cul_keiten(winner1, winner2, winner3, winner4){
+function cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku){
   let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
-	// DEBUG: 複数人テンパイがいる時の処理を見直すべき
-	// 誰と誰がテンパイだったのか
-  if(n != 0){
-	let tensu = 3000 / n;
-	console.log("player" + n + ", " + tensu + "点");
+	let r1_score = (reach1 ? -1: 0) * 1000;
+	let r2_score = (reach2 ? -1: 0) * 1000;
+	let r3_score = (reach3 ? -1: 0) * 1000;
+	let r4_score = (reach4 ? -1: 0) * 1000;
+	let newData = [["第"+kyoku+"局", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
+  if (n==4) {
+	console.log("全員テンパイ");
+  } else if(n != 0){
+	console.log("流局処理");
+	let get_tensu = 3000 / n;
+	let give_tensu = -(3000 / (4-n));
+
+	if (winner1) {
+		console.log("player1:" + get_tensu + "点");
+		newData[0][2] = get_tensu;
+	} else {
+		console.log("player1:" + give_tensu + "点");
+		newData[0][2] = give_tensu;
+	}
+	if (winner2) {
+		console.log("player2:" + get_tensu + "点");
+		newData[0][4] = get_tensu;
+	} else {
+		console.log("player1:" + give_tensu + "点");
+		newData[0][4] = give_tensu;
+	}
+	if (winner3) {
+		console.log("player3:" + get_tensu + "点");
+		newData[0][6] = get_tensu;
+	} else {
+		console.log("player1:" + give_tensu + "点");
+		newData[0][6] = give_tensu;
+	}
+	if (winner4) {
+		console.log("player4:" + get_tensu + "点");
+		newData[0][8] = get_tensu;
+	} else {
+		console.log("player1:" + give_tensu + "点");
+		newData[0][8] = give_tensu;
+	}
   }else{
 	console.log("ノーテン");
   }
+
+	console.log(newData);
+
+	return newData;
 }
 
 function cul_tumo(winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han, hu){
@@ -543,7 +584,19 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 // IPC通信でボタンのクリックイベントを受け取り、Excelファイルを書き換える
 ipcMain.on('edit-excel', (event, arg) => {
 	console.log("start ipcMain");
-    const filePath = 'data.xlsx'; // 読み込みたいExcelファイルのパス
+
+
+    // 追加データを作成
+    let newData = [["0本場", 8000, -2000, -2000, -4000]];
+
+
+    // 処理が完了したことを通知
+    event.reply('excel-updated', 'Excelファイルが更新されました');
+});
+*/
+
+function editExcel(newData) {
+	console.log("[edit Excel]");
 
     // 既存のExcelファイルを読み込み
     let workbook = XLSX.readFile(filePath);
@@ -551,25 +604,22 @@ ipcMain.on('edit-excel', (event, arg) => {
     // シートを取得
     let worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-    // 追加データを作成
-    let newData = [["0本場", 8000, -2000, -2000, -4000]];
-
     // 既存シートに新しいデータを追加
     XLSX.utils.sheet_add_aoa(worksheet, newData, { origin: { r: row, c: 0 }});
 	row++;	// 次に書き換える行を更新する
 
     // ファイルに上書き保存
     XLSX.writeFile(workbook, filePath);
+	console.log("wrote to Excel!");	
+	console.log();// 改行のため
+}
 
-    // 処理が完了したことを通知
-    event.reply('excel-updated', 'Excelファイルが更新されました');
-});
-*/
-
-ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4) => {
+ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku) => {
 	console.log("[keiten func]");
-	cul_keiten(winner1, winner2, winner3, winner4);
+	let newData = cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku);
 	console.log();	// 改行のため
+
+	editExcel(newData);
 });
 
 ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han, hu) => {
