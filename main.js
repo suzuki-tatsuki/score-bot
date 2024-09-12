@@ -94,18 +94,23 @@ function cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, 
   }
 
 	console.log(newData);
-
 	return newData;
 }
 
-function cul_tumo(winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han, hu){
-  let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
+function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu){
+  let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0) + (kyotaku ? 1 : 0) + (honba ? 1 : 0);
   let m = (winner1 ? 1 : 0) + (winner2 ? 2 : 0) + (winner3 ? 3 : 0) + (winner4 ? 4 : 0);
   let tensu;
   let kachiten;
   let maketen;
   let tensu_oya;
   let tensu_ko;
+
+	let r1_score = (reach1 ? -1: 0) * 1000;
+	let r2_score = (reach2 ? -1: 0) * 1000;
+	let r3_score = (reach3 ? -1: 0) * 1000;
+	let r4_score = (reach4 ? -1: 0) * 1000;
+	let newData = [["第"+kyoku+"局", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
 
   if( n != 1 ){
 	console.log("正しく選択されていません");
@@ -213,10 +218,17 @@ function cul_tumo(winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han
 	  }
 	}
 
-	// DEBUG: 点数表示を親子で分ける理由がなければ共通化できるはず
 	kachiten = tensu + kyotaku * 1000 + honba * 300 ;
 	maketen = -((tensu / 3) + honba * 100) ;
 	console.log("勝ち："+ kachiten +" 払い："+ maketen);
+
+	for (let i=1; i<5; i++) {
+		if (m==i) { 
+			newData[0][i*2] = kachiten;
+		} else {
+			newData[0][i*2] = maketen;
+		}
+	}
 
   }else{
 	//子の場合
@@ -355,17 +367,34 @@ function cul_tumo(winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han
 	console.log("勝ち："+((tensu_oya + 2 * tensu_ko) + kyotaku * 1000 + kyoku * 300)
 	+"　親払い："+(tensu_oya + kyoku * 100)+
 	"　子払い："+(tensu_ko + kyoku * 100));
+
+	for (let i=1; i<5; i++) {
+		if (m==i) { 
+			newData[0][i*2] = (tensu_oya + 2 * tensu_ko) + kyotaku * 1000 + kyoku * 300;
+		} else if (kyoku==i){
+			newData[0][i*2] = tensu_oya + kyoku * 100;
+		} else {
+			newData[0][i*2] = tensu_ko + kyoku * 100;
+		}
+	}
   }
+
+	console.log(newData);
+	return newData;
 }
 
-function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, kyoku, han, hu){
+function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu){
   let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
   let m = (winner1 ? 1 : 0) + (winner2 ? 2 : 0) + (winner3 ? 3 : 0) + (winner4 ? 4 : 0);
   let l = (loser1 ? 1 : 0) + (loser2 ? 2 : 0) + (loser3 ? 3 : 0) + (loser4 ? 4 : 0);
   let tensu;
 
-	// DEBUG:同じ人を選択した場合も弾くべき
-	// もしくはチェックボックスじゃなくてプルタブを使う
+	let r1_score = (reach1 ? -1: 0) * 1000;
+	let r2_score = (reach2 ? -1: 0) * 1000;
+	let r3_score = (reach3 ? -1: 0) * 1000;
+	let r4_score = (reach4 ? -1: 0) * 1000;
+	let newData = [["第"+kyoku+"局", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
+
   if( n != 1 ){
 	console.log("正しく選択されていません")
   }else if( m == kyoku ){
@@ -577,23 +606,19 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
   }
 
 	console.log("player" + l + " -> player" + n);
-	console.log("点数："+ tensu + "+" + kyoku * 100);
+	console.log("点数："+ tensu + kyoku * 100);
+
+	for (let i=1; i<5; i++) {
+		if (n==i) { 
+			newData[0][i*2] = tensu + kyoku * 100;
+		} else if (l==i) {
+			newData[0][i*2] = -(tensu + kyoku * 100);
+		}
+	}
+
+	console.log(newData);
+	return newData;
 }
-
-/*
-// IPC通信でボタンのクリックイベントを受け取り、Excelファイルを書き換える
-ipcMain.on('edit-excel', (event, arg) => {
-	console.log("start ipcMain");
-
-
-    // 追加データを作成
-    let newData = [["0本場", 8000, -2000, -2000, -4000]];
-
-
-    // 処理が完了したことを通知
-    event.reply('excel-updated', 'Excelファイルが更新されました');
-});
-*/
 
 function editExcel(newData) {
 	console.log("[edit Excel]");
@@ -619,18 +644,34 @@ ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2,
 	let newData = cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku);
 	console.log();	// 改行のため
 
+	// エクセルに書き込む
 	editExcel(newData);
+
+    // 処理が完了したことを通知
+    event.reply('keiten culculated!', '形テンの処理が完了しました');
 });
 
-ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han, hu) => {
+ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu) => {
 	console.log("[tumo func]");
-	cul_tumo(winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han, hu);
+	let newData = cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu);
 	console.log();	// 改行のため
+
+	// エクセルに書き込む
+	editExcel(newData);
+	//
+    // 処理が完了したことを通知
+    event.reply('tumo culculated!', 'ツモの処理が完了しました');
 });
 
-ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, kyoku, han, hu) => {
+ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu) => {
 	console.log("[ron func]");
-	cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, kyoku, han, hu);
+	let newData = cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu);
 	console.log();	// 改行のため
+
+	// エクセルに書き込む
+	editExcel(newData);
+	
+    // 処理が完了したことを通知
+    event.reply('ron culculated!', 'ロンの処理が完了しました');
 });
 

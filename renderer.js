@@ -22,13 +22,18 @@ document.getElementById('tumo').addEventListener('click', () => {
 	let winner3 = document.getElementById("tumo3").checked;
 	let winner4 = document.getElementById("tumo4").checked;
 
+	let reach1 = document.getElementById("reach1").checked;
+	let reach2 = document.getElementById("reach2").checked;
+	let reach3 = document.getElementById("reach3").checked;
+	let reach4 = document.getElementById("reach4").checked;
+
 	let kyotaku = parseInt(document.getElementById("kyotaku").value);
 	let honba = parseInt(document.getElementById("honba").value);
 	let kyoku = parseInt(document.getElementById("kyoku").value);
 	let han = parseInt(document.getElementById("han").value);
 	let hu = parseInt(document.getElementById("hu").value);
 
-    ipcRenderer.send('tumo', winner1, winner2, winner3, winner4, kyotaku, honba, kyoku, han, hu);
+    ipcRenderer.send('tumo', winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu);
 });
 
 document.getElementById('ron').addEventListener('click', () => {
@@ -42,9 +47,14 @@ document.getElementById('ron').addEventListener('click', () => {
 	let loser3 = document.getElementById("loser3").checked;
 	let loser4 = document.getElementById("loser4").checked;
 
+	let reach1 = document.getElementById("reach1").checked;
+	let reach2 = document.getElementById("reach2").checked;
+	let reach3 = document.getElementById("reach3").checked;
+	let reach4 = document.getElementById("reach4").checked;
+
 	let kyoku = parseInt(document.getElementById("kyoku").value);
 	let han = parseInt(document.getElementById("han_ron").value);
 	let hu = parseInt(document.getElementById("hu_ron").value);
 
-    ipcRenderer.send('ron', winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4,kyoku, han, hu);
+    ipcRenderer.send('ron', winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu);
 });
