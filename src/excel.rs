@@ -12,7 +12,7 @@ pub fn read_excel() -> ExcelData {
 
     let mut score = vec![0.0, 0.0, 0.0, 0.0];
 
-    if let Ok(range) = workbook.worksheet_range("Sheet1") {
+    if let Ok(range) = workbook.worksheet_range("ScoreSheet") {
         for row in 1..5 {
             let cell_value = range.get_value((row as u32, 11));
 
