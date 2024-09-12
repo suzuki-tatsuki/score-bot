@@ -675,3 +675,27 @@ ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, lo
     event.reply('ron culculated!', 'ロンの処理が完了しました');
 });
 
+ipcMain.on('redo', (event) => {
+	if (row < 2) {
+		console.log("まだデータが入力されていません");
+	} else {
+		console.log("[redo latest edit]");
+
+		// 空のデータ列で上書きする
+		let nullData = [["","","","","","","","","",""]];
+
+		console.log("add empty data to overwrite");
+
+		row--;	// 最新の更新の行に戻す
+		// エクセルに書き込む
+		editExcel(nullData);
+		row--;	// edit excelで進めた分戻す
+		
+		console.log("row: " + row);
+		console.log();	// 改行のため
+
+		// 処理が完了したことを通知
+		event.reply('redo latest edit!', '１つ前に戻しました');
+	}
+});
+

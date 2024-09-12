@@ -58,3 +58,8 @@ document.getElementById('ron').addEventListener('click', () => {
 
     ipcRenderer.send('ron', winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu);
 });
+
+
+document.getElementById('redo').addEventListener('click', () => {
+    ipcRenderer.send('redo');
+});
