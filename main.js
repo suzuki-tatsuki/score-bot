@@ -634,8 +634,12 @@ function editExcel(newData) {
 	row++;	// 次に書き換える行を更新する
 
     // ファイルに上書き保存
-    XLSX.writeFile(workbook, filePath);
-	console.log("wrote to Excel!");	
+	try {
+		XLSX.writeFile(workbook, filePath);
+		console.log('File saved successfully');
+	} catch (err) {
+		console.error('Error saving file:', err);
+	}
 	console.log();// 改行のため
 }
 
