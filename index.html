@@ -19,7 +19,8 @@
       <option value="3">3
       <option value="4">4</select>局
     <input type="text" id="honba" class="custom-input" placeholder="何" size=1>本場 &emsp;
-    供託<input type="text" id="kyotaku"class="custom-input" placeholder="何" size=1>本
+    供託<input type="text" id="kyotaku"class="custom-input" placeholder="何" size=1>本 &emsp;
+      <button id="redo" type="button">１つ戻る</button> &emsp;
     <br><br>
 
     <!--立直者の情報-->
@@ -35,10 +36,10 @@
     <fieldset>
       <legend>形テン</legend>
       上がった人<br> &emsp;
-      <input type="radio" name="keiten" id="keiten1" value="1">player1 &emsp;
-      <input type="radio" name="keiten" id="keiten2" value="1">player2 &emsp;
-      <input type="radio" name="keiten" id="keiten3" value="1">player3 &emsp;
-      <input type="radio" name="keiten" id="keiten4" value="1">player4 &emsp;<br><br>
+      <input type="checkbox" id="keiten1" value="1">player1 &emsp;
+      <input type="checkbox" id="keiten2" value="1">player2 &emsp;
+      <input type="checkbox" id="keiten3" value="1">player3 &emsp;
+      <input type="checkbox" id="keiten4" value="1">player4 &emsp;<br><br>
       <button id="keiten" type="button">出力</button> &emsp;<br>
     </fieldset><br>
 
@@ -95,7 +96,7 @@
       <button id="ron" type="button">出力</button> &emsp;<br>
     </fieldset><br>
 
-      <button id="redo" type="button">１つ戻る</button> &emsp;<br>
+      <!--button id="reset" type="button">次の局へ</button-->
 
 	</div>
     <script src="renderer.js"></script>

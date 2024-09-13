@@ -63,3 +63,7 @@ document.getElementById('ron').addEventListener('click', () => {
 document.getElementById('redo').addEventListener('click', () => {
     ipcRenderer.send('redo');
 });
+
+document.getElementById('reset').addEventListener('click', () => {
+    ipcRenderer.send('reset');
+});

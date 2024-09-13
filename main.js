@@ -699,3 +699,42 @@ ipcMain.on('redo', (event) => {
 	}
 });
 
+/*
+ipcMain.on('reset', (event) => {
+	if (row < 2) {
+		console.log("まだデータが入力されていません");
+	} else {
+		console.log("[reset curent excel sheet]");
+
+		// 現在の日時を取得
+		let now = new Date();
+		let year = now.getFullYear();
+		let month = String(now.getMonth() + 1).padStart(2, '0'); // 月は0から始まるため+1
+		let day = String(now.getDate()).padStart(2, '0');
+		let hours = String(now.getHours()).padStart(2, '0');
+		let minutes = String(now.getMinutes()).padStart(2, '0');
+		let seconds = String(now.getSeconds()).padStart(2, '0');
+
+		// 日時のデータを整形する
+		let dateTime = `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
+		console.log("フォーマット済み日時: " + dateTime);
+		console.log();	// 改行のため
+
+		// 既存のExcelファイルを読み込み
+		let workbook = XLSX.readFile(filePath);
+
+		// シートを取得
+		let scoreSheet = workbook.Sheets[workbook.SheetNames[0]];
+		let templateSheet = workbook.Sheets[workbook.SheetNames[1]];
+
+		//XLSX.utils.book_append_sheet(workbook, scoreSheet, dateTime);	// 現在のシートを複製保存する
+		//XLSX.utils.sheet_add_aoa(workbook, templateSheet, 'ScoreSheet');	// 現在のシートを上書きする
+
+		// ファイルに上書き保存
+		XLSX.writeFile(workbook, filePath);
+
+		// 処理が完了したことを通知
+		event.reply('reset ScoreSheet!', '参照するシートを初期化しました');
+	}
+});
+*/
