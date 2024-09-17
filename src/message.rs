@@ -78,10 +78,10 @@ impl EventHandler for Handler {
                             CreateEmbed::new()
                                 .color(0xDC143C)
                                 .title("player2の得点")
-                                .field("得点", my_score.to_string(), true)
-                                .field("p1との差", add_plus(diff2_1), false)
-                                .field("p3との差", add_plus(diff2_3), false)
-                                .field("p4との差", add_plus(diff2_4), false)
+                                .field("得点", my_score.to_string(), false)
+                                .field("p1との差", add_plus(diff2_1), true)
+                                .field("p3との差", add_plus(diff2_3), true)
+                                .field("p4との差", add_plus(diff2_4), true)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
@@ -98,10 +98,10 @@ impl EventHandler for Handler {
                             CreateEmbed::new()
                                 .color(0x008000)
                                 .title("player3の得点")
-                                .field("得点", my_score.to_string(), true)
-                                .field("p1との差", add_plus(diff3_1), false)
-                                .field("p2との差", add_plus(diff3_2), false)
-                                .field("p4との差", add_plus(diff3_4), false)
+                                .field("得点", my_score.to_string(), false)
+                                .field("p1との差", add_plus(diff3_1), true)
+                                .field("p2との差", add_plus(diff3_2), true)
+                                .field("p4との差", add_plus(diff3_4), true)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
@@ -118,10 +118,10 @@ impl EventHandler for Handler {
                             CreateEmbed::new()
                                 .color(0xFFFF00)
                                 .title("player4の得点")
-                                .field("得点", my_score.to_string(), true)
-                                .field("p1との差", add_plus(diff4_1), false)
-                                .field("p2との差", add_plus(diff4_2), false)
-                                .field("p3との差", add_plus(diff4_3), false)
+                                .field("得点", my_score.to_string(), false)
+                                .field("p1との差", add_plus(diff4_1), true)
+                                .field("p2との差", add_plus(diff4_2), true)
+                                .field("p3との差", add_plus(diff4_3), true)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
