@@ -1,5 +1,4 @@
 use crate::excel;
-
 use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::all::{CreateMessage, CreateEmbed};
@@ -40,9 +39,9 @@ impl EventHandler for Handler {
                 let excel_data = excel::read_excel();
                 print!("reload data!");
                 let my_score = excel_data.score[0];
-                let diff1_2 = my_score - excel_data.score[1];
-                let diff1_3 = my_score - excel_data.score[2];
-                let diff1_4 = my_score - excel_data.score[3];
+                let diff1_2 = excel_data.score[1] - my_score;
+                let diff1_3 = excel_data.score[2] - my_score;
+                let diff1_4 = excel_data.score[3] - my_score;
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -62,9 +61,9 @@ impl EventHandler for Handler {
                 let excel_data = excel::read_excel();
                 print!("reload data!");
                 let my_score = excel_data.score[1];
-                let diff2_1 = my_score - excel_data.score[0];
-                let diff2_3 = my_score - excel_data.score[2];
-                let diff2_4 = my_score - excel_data.score[3];
+                let diff2_1 = excel_data.score[0] - my_score;
+                let diff2_3 = excel_data.score[2] - my_score;
+                let diff2_4 = excel_data.score[3] - my_score;
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -72,7 +71,7 @@ impl EventHandler for Handler {
                                 .color(0xDC143C)
                                 .title("player2の得点")
                                 .field("得点", my_score.to_string(), true)
-                                .field("p2との差", diff2_1.to_string(), false)
+                                .field("p1との差", diff2_1.to_string(), false)
                                 .field("p3との差", diff2_3.to_string(), false)
                                 .field("p4との差", diff2_4.to_string(), false)
                         )
@@ -84,18 +83,18 @@ impl EventHandler for Handler {
                 let excel_data = excel::read_excel();
                 print!("reload data!");
                 let my_score = excel_data.score[2];
-                let diff3_1 = my_score - excel_data.score[0];
-                let diff3_2 = my_score - excel_data.score[1];
-                let diff3_4 = my_score - excel_data.score[3];
+                let diff3_1 = excel_data.score[0] - my_score;
+                let diff3_2 = excel_data.score[1] - my_score;
+                let diff3_4 = excel_data.score[3] - my_score;
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
                             CreateEmbed::new()
                                 .color(0x008000)
-                                .title("player1の得点")
+                                .title("player3の得点")
                                 .field("得点", my_score.to_string(), true)
-                                .field("p2との差", diff3_1.to_string(), false)
-                                .field("p3との差", diff3_2.to_string(), false)
+                                .field("p1との差", diff3_1.to_string(), false)
+                                .field("p2との差", diff3_2.to_string(), false)
                                 .field("p4との差", diff3_4.to_string(), false)
                         )
                 ).await {
@@ -106,9 +105,9 @@ impl EventHandler for Handler {
                 let excel_data = excel::read_excel();
                 print!("reload data!");
                 let my_score = excel_data.score[3];
-                let diff4_1 = my_score - excel_data.score[0];
-                let diff4_2 = my_score - excel_data.score[1];
-                let diff4_3 = my_score - excel_data.score[2];
+                let diff4_1 = excel_data.score[0] - my_score;
+                let diff4_2 = excel_data.score[1] - my_score;
+                let diff4_3 = excel_data.score[2] - my_score;
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -116,9 +115,9 @@ impl EventHandler for Handler {
                                 .color(0xFFFF00)
                                 .title("player4の得点")
                                 .field("得点", my_score.to_string(), true)
-                                .field("p2との差", diff4_1.to_string(), false)
-                                .field("p3との差", diff4_2.to_string(), false)
-                                .field("p4との差", diff4_3.to_string(), false)
+                                .field("p1との差", diff4_1.to_string(), false)
+                                .field("p2との差", diff4_2.to_string(), false)
+                                .field("p3との差", diff4_3.to_string(), false)
                         )
                 ).await {
                     println!("Error sending message: {:?}", why);
