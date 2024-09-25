@@ -9,6 +9,11 @@ const filePath = 'Suzuki_League_Score.xlsx'; // 読み込みたいExcelファイ
 // エクセルに挿入する行を管理するための変数
 let row = 1;
 
+let kyoku = 1;
+let honba = 0;
+let kyotaku = 0;
+let kaze = ["東１局","東２局","東３局","東４局","南１局","南２局","南３局","南４局","終了"];
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -47,13 +52,24 @@ app.on('window-all-closed', () => {
 	app.quit();
 });
 
-function cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku){
+function cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4){
   let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
 	let r1_score = (reach1 ? -1: 0) * 1000;
 	let r2_score = (reach2 ? -1: 0) * 1000;
 	let r3_score = (reach3 ? -1: 0) * 1000;
 	let r4_score = (reach4 ? -1: 0) * 1000;
-	let newData = [["第"+kyoku+"局", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
+  let keizoku = [(winner1 ? 1: 0),(winner2 ? 1: 0),(winner3 ? 1: 0),(winner4? 1: 0)];
+  let r_cnt = (reach1 ? 1: 0) + (reach2 ? 1: 0) + (reach3 ? 1: 0) + (reach4? 1: 0);
+	let newData = [[kaze[kyoku-1]+honba+"本場", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
+  kyotaku = kyotaku + r_cnt;
+
+  if (keizoku[kyoku-1] == 1 || keizoku[kyoku-5] == 1) {
+    honba++;
+  }else{
+    kyoku++;
+    honba++;
+  }
+
   if (n==4) {
 	console.log("全員テンパイ");
   } else if(n != 0){
@@ -97,24 +113,26 @@ function cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, 
 	return newData;
 }
 
-function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu){
-  let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0) + (kyotaku ? 1 : 0) + (honba ? 1 : 0);
+function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, han, hu){
+  let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
   let m = (winner1 ? 1 : 0) + (winner2 ? 2 : 0) + (winner3 ? 3 : 0) + (winner4 ? 4 : 0);
-  let tensu;
-  let kachiten;
-  let maketen;
-  let tensu_oya;
-  let tensu_ko;
+  let tensu = 0;
+  let kachiten = 0;
+  let maketen = 0;
+  let tensu_oya = 0;
+  let tensu_ko = 0;
 
 	let r1_score = (reach1 ? -1: 0) * 1000;
 	let r2_score = (reach2 ? -1: 0) * 1000;
 	let r3_score = (reach3 ? -1: 0) * 1000;
 	let r4_score = (reach4 ? -1: 0) * 1000;
-	let newData = [["第"+kyoku+"局", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
+  let r_cnt = (reach1 ? 1: 0) + (reach2 ? 1: 0) + (reach3 ? 1: 0) + (reach4? 1: 0);
+  kyotaku = kyotaku + r_cnt;
+	let newData = [[kaze[kyoku-1]+honba+"本場", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
 
   if( n != 1 ){
 	console.log("正しく選択されていません");
-  }else if( m == kyoku ){
+}else if( m == kyoku || m == kyoku-4 ){
 	//親の場合
 	if(han >= 13){
 	  tensu = 48000 ;
@@ -124,7 +142,7 @@ function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, re
 	  tensu = 24000 ;
 	}else if(han >= 6){
 	  tensu = 18000 ;
-	}else if(han == 5||(han == 4 && hu >= 30)||(han == 3 && hu >= 70)){
+	}else if(han == 5||(han == 4 && hu >= 30)||(han == 3 && hu >= 60)){
 	  tensu = 12000 ;
 	}else if(han == 4){
 	  switch(hu){
@@ -156,9 +174,6 @@ function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, re
 	}else if(han == 2){
 	  switch(hu){
 		case 20 :
-		tensu = 2100 ;
-		break;
-		case 25 :
 		tensu = 2100 ;
 		break;
 		case 30 :
@@ -223,12 +238,13 @@ function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, re
 	console.log("勝ち："+ kachiten +" 払い："+ maketen);
 
 	for (let i=1; i<5; i++) {
-		if (m==i) { 
+		if (m==i) {
 			newData[0][i*2] = kachiten;
 		} else {
 			newData[0][i*2] = maketen;
 		}
 	}
+  kyoku++;
 
   }else{
 	//子の場合
@@ -244,7 +260,7 @@ function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, re
 	}else if(han >= 6){
 	  tensu_ko = 3000 ;
 	  tensu_oya = 6000 ;
-	}else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 70)){
+	}else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 60)){
 	  tensu_ko = 2000 ;
 	  tensu_oya = 4000 ;
 	}else if(han == 4){
@@ -369,35 +385,39 @@ function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, re
 	"　子払い："+(tensu_ko + kyoku * 100));
 
 	for (let i=1; i<5; i++) {
-		if (m==i) { 
+		if (m==i) {
 			newData[0][i*2] = (tensu_oya + 2 * tensu_ko) + kyotaku * 1000 + kyoku * 300;
 		} else if (kyoku==i){
-			newData[0][i*2] = tensu_oya + kyoku * 100;
+			newData[0][i*2] = -(tensu_oya + kyoku * 100);
 		} else {
-			newData[0][i*2] = tensu_ko + kyoku * 100;
+			newData[0][i*2] = -(tensu_ko + kyoku * 100);
 		}
 	}
+  honba = 0;
+  kyoku++;
   }
-
+  kyotaku = 0;
 	console.log(newData);
 	return newData;
 }
 
-function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu){
+function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, han, hu){
   let n = (winner1 ? 1 : 0) + (winner2 ? 1 : 0) + (winner3 ? 1 : 0) + (winner4 ? 1 : 0);
   let m = (winner1 ? 1 : 0) + (winner2 ? 2 : 0) + (winner3 ? 3 : 0) + (winner4 ? 4 : 0);
   let l = (loser1 ? 1 : 0) + (loser2 ? 2 : 0) + (loser3 ? 3 : 0) + (loser4 ? 4 : 0);
-  let tensu;
+  let tensu = 0;
 
 	let r1_score = (reach1 ? -1: 0) * 1000;
 	let r2_score = (reach2 ? -1: 0) * 1000;
 	let r3_score = (reach3 ? -1: 0) * 1000;
 	let r4_score = (reach4 ? -1: 0) * 1000;
-	let newData = [["第"+kyoku+"局", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
+  let r_cnt = (reach1 ? 1: 0) + (reach2 ? 1: 0) + (reach3 ? 1: 0) + (reach4? 1: 0);
+  kyotaku = kyotaku + r_cnt;
+	let newData = [[kaze[kyoku-1]+honba+"本場", r1_score, 0, r2_score, 0, r3_score, 0, r4_score, 0]];
 
   if( n != 1 ){
 	console.log("正しく選択されていません")
-  }else if( m == kyoku ){
+  }else if( m == kyoku || m == kyoku-4 ){
 	//親の場合
 	if(han >= 13){
 	  tensu = 48000 ;
@@ -407,7 +427,7 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 	  tensu = 24000 ;
 	}else if(han >= 6){
 	  tensu = 18000 ;
-	}else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 70)){
+	}else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 60)){
 	  tensu = 12000 ;
 	}else if(han == 4){
 	  switch(hu){
@@ -510,7 +530,7 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 	  tensu = 18000 ;
 	}else if(han >= 6){
 	  tensu = 12000 ;
-	}else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 70)){
+	}else if(han == 5||(han >= 4 && hu >= 30)||(han >= 3 && hu >= 60)){
 	  tensu = 8000 ;
 	}else if(han == 4){
 	  switch(hu){
@@ -538,7 +558,7 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 		case 50 :
 		tensu = 6400 ;
 		break;
-	  }
+    }
 	}else if(han == 2){
 	  switch(hu){
 		case 20 :
@@ -606,16 +626,16 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
   }
 
 	console.log("player" + l + " -> player" + n);
-	console.log("点数："+ tensu + kyoku * 100);
+	console.log("点数："+ tensu + kyoku * 100 + kyotaku * 1000);
 
 	for (let i=1; i<5; i++) {
-		if (n==i) { 
-			newData[0][i*2] = tensu + kyoku * 100;
+		if (n==i) {
+			newData[0][i*2] = tensu + kyoku * 100 + kyotaku * 1000;
 		} else if (l==i) {
 			newData[0][i*2] = -(tensu + kyoku * 100);
 		}
 	}
-
+  kyotaku = 0;
 	console.log(newData);
 	return newData;
 }
@@ -643,9 +663,9 @@ function editExcel(newData) {
 	console.log();// 改行のため
 }
 
-ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku) => {
+ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4) => {
 	console.log("[keiten func]");
-	let newData = cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyoku);
+	let newData = cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4);
 	console.log();	// 改行のため
 
 	// エクセルに書き込む
@@ -655,9 +675,9 @@ ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2,
     event.reply('keiten culculated!', '形テンの処理が完了しました');
 });
 
-ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu) => {
+ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, han, hu) => {
 	console.log("[tumo func]");
-	let newData = cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, kyotaku, honba, kyoku, han, hu);
+	let newData = cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4, han, hu);
 	console.log();	// 改行のため
 
 	// エクセルに書き込む
@@ -667,14 +687,14 @@ ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, reach1, reach2, r
     event.reply('tumo culculated!', 'ツモの処理が完了しました');
 });
 
-ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu) => {
+ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, han, hu) => {
 	console.log("[ron func]");
-	let newData = cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, kyoku, han, hu);
+	let newData = cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, loser4, reach1, reach2, reach3, reach4, han, hu);
 	console.log();	// 改行のため
 
 	// エクセルに書き込む
 	editExcel(newData);
-	
+
     // 処理が完了したことを通知
     event.reply('ron culculated!', 'ロンの処理が完了しました');
 });
@@ -694,7 +714,7 @@ ipcMain.on('redo', (event) => {
 		// エクセルに書き込む
 		editExcel(nullData);
 		row--;	// edit excelで進めた分戻す
-		
+
 		console.log("row: " + row);
 		console.log();	// 改行のため
 
