@@ -1,4 +1,4 @@
-use std::string;
+// use std::string;
 
 use crate::excel;
 use serenity::async_trait;
@@ -49,9 +49,9 @@ impl EventHandler for Handler {
             }
             "player1" | "p1" | "1" | "１" => {
                 let my_score = excel_data.score[0];
-                let diff1_2 = excel_data.score[1] - my_score;
-                let diff1_3 = excel_data.score[2] - my_score;
-                let diff1_4 = excel_data.score[3] - my_score;
+                let diff1_2 = my_score - excel_data.score[1];
+                let diff1_3 = my_score - excel_data.score[2];
+                let diff1_4 = my_score - excel_data.score[3];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -69,9 +69,9 @@ impl EventHandler for Handler {
             }
             "player2" | "p2" | "2" | "２" => {
                 let my_score = excel_data.score[1];
-                let diff2_1 = excel_data.score[0] - my_score;
-                let diff2_3 = excel_data.score[2] - my_score;
-                let diff2_4 = excel_data.score[3] - my_score;
+                let diff2_1 = my_score - excel_data.score[0];
+                let diff2_3 = my_score - excel_data.score[2];
+                let diff2_4 = my_score - excel_data.score[3];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -89,9 +89,9 @@ impl EventHandler for Handler {
             }
             "player3" | "p3" | "3" | "３" => {
                 let my_score = excel_data.score[2];
-                let diff3_1 = excel_data.score[0] - my_score;
-                let diff3_2 = excel_data.score[1] - my_score;
-                let diff3_4 = excel_data.score[3] - my_score;
+                let diff3_1 = my_score - excel_data.score[0];
+                let diff3_2 = my_score - excel_data.score[1];
+                let diff3_4 = my_score - excel_data.score[3];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
@@ -109,9 +109,9 @@ impl EventHandler for Handler {
             }
             "player4" | "p4" | "4" | "４" => {
                 let my_score = excel_data.score[3];
-                let diff4_1 = excel_data.score[0] - my_score;
-                let diff4_2 = excel_data.score[1] - my_score;
-                let diff4_3 = excel_data.score[2] - my_score;
+                let diff4_1 = my_score - excel_data.score[0];
+                let diff4_2 = my_score - excel_data.score[1];
+                let diff4_3 = my_score - excel_data.score[2];
                 if let Err(why) = msg.channel_id.send_message(&ctx.http,
                     CreateMessage::new()
                         .embed(
