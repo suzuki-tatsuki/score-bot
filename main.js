@@ -1,10 +1,13 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const XLSX = require('xlsx');
+const fs = require('fs');
 
 let mainWindow;
 
 const filePath = 'Suzuki_League_Score.xlsx'; // 読み込みたいExcelファイルのパス
+
+let score_array = [["得点", 25000, 25000, 25000, 25000]];
 
 // エクセルに挿入する行を管理するための変数
 let row = 1;
@@ -110,6 +113,7 @@ function cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, 
   }
 
 	console.log(newData);
+	score_array = score_array.concat(newData);
 	return newData;
 }
 
@@ -398,6 +402,7 @@ function cul_tumo(winner1, winner2, winner3, winner4, reach1, reach2, reach3, re
   }
   kyotaku = 0;
 	console.log(newData);
+	score_array = score_array.concat(newData);
 	return newData;
 }
 
@@ -637,6 +642,7 @@ function cul_ron(winner1, winner2, winner3, winner4, loser1, loser2, loser3, los
 	}
   kyotaku = 0;
 	console.log(newData);
+	score_array = score_array.concat(newData);
 	return newData;
 }
 
@@ -663,6 +669,22 @@ function editExcel(newData) {
 	console.log();// 改行のため
 }
 
+function outputJson() {
+	console.log("[output to json file]");
+	// JSON文字列に変換
+	const jsonData = JSON.stringify(score_array, null, 2); // 2はインデントの設定
+
+	// JSONファイルに書き込み
+	fs.writeFile('output.json', jsonData, (err) => {
+		if (err) {
+			console.error('Error writing file', err);
+		} else {
+			console.log('JSON file has been saved.');
+		}
+	});
+	console.log();// 改行のため
+}
+
 ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4) => {
 	console.log("[keiten func]");
 	let newData = cul_keiten(winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4);
@@ -670,6 +692,9 @@ ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2,
 
 	// エクセルに書き込む
 	editExcel(newData);
+
+	// excelとは別のファイルにデータを出力する
+	outputJson();
 
     // 処理が完了したことを通知
     event.reply('keiten culculated!', '形テンの処理が完了しました');
@@ -682,7 +707,10 @@ ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, reach1, reach2, r
 
 	// エクセルに書き込む
 	editExcel(newData);
-	//
+	
+	// excelとは別のファイルにデータを出力する
+	outputJson();
+
     // 処理が完了したことを通知
     event.reply('tumo culculated!', 'ツモの処理が完了しました');
 });
@@ -695,10 +723,15 @@ ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, lo
 	// エクセルに書き込む
 	editExcel(newData);
 
+	// excelとは別のファイルにデータを出力する
+	outputJson();
+
     // 処理が完了したことを通知
     event.reply('ron culculated!', 'ロンの処理が完了しました');
 });
 
+// todo: 新しいデータファイルにも取り消し操作を対応する必要がある
+/*
 ipcMain.on('redo', (event) => {
 	if (row < 2) {
 		console.log("まだデータが入力されていません");
