@@ -682,7 +682,6 @@ function outputJson() {
 			console.log('JSON file has been saved.');
 		}
 	});
-	console.log();// 改行のため
 }
 
 ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2, reach3, reach4) => {
@@ -695,6 +694,7 @@ ipcMain.on('keiten', (event, winner1, winner2, winner3, winner4, reach1, reach2,
 
 	// excelとは別のファイルにデータを出力する
 	outputJson();
+	console.log();// 改行のため
 
     // 処理が完了したことを通知
     event.reply('keiten culculated!', '形テンの処理が完了しました');
@@ -710,6 +710,7 @@ ipcMain.on('tumo', (event, winner1, winner2, winner3, winner4, reach1, reach2, r
 	
 	// excelとは別のファイルにデータを出力する
 	outputJson();
+	console.log();// 改行のため
 
     // 処理が完了したことを通知
     event.reply('tumo culculated!', 'ツモの処理が完了しました');
@@ -725,6 +726,7 @@ ipcMain.on('ron', (event, winner1, winner2, winner3, winner4, loser1, loser2, lo
 
 	// excelとは別のファイルにデータを出力する
 	outputJson();
+	console.log();// 改行のため
 
     // 処理が完了したことを通知
     event.reply('ron culculated!', 'ロンの処理が完了しました');
